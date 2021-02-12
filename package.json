@@ -1,0 +1,12 @@
+{
+  "name": "clipshare-backend",
+  "version": "1.0.0",
+  "description": "share clipboard between phone and pc",
+  "main": "app.js",
+  "author": "deedatbilla",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^2.1.1",
+    "express": "^4.17.1"
+  }
+}
