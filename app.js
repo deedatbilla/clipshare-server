@@ -3,13 +3,13 @@ const express = require('express')
 require('./Database/db')
 const userRouter = require('./Routes/auth')
 const deviceRouter = require('./Routes/device')
-
-
+const clipBoard = require('./Routes/clipBoard')
 const port = process.env.PORT
 const app = express()
 app.use(express.json()) 
 app.use(userRouter)
 app.use(deviceRouter)
+app.use(clipBoard)
 app.use('/public', express.static('public'));
 app.use((req, res, next) => { 
     // Error goes via `next()` method

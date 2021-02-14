@@ -27,6 +27,7 @@ const userSchema = mongoose.Schema(
       required: true,
       minLength: 6,
     },
+    paid:false,
     tokens: [
       {
         token: {
