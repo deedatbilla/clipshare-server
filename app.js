@@ -30,8 +30,7 @@ app.listen(port, () => {
 });
 const devices = {};
 io.on("connection", (socket) => {
-  
-   //when user sends clipboard from phone to pcs
+  //when user sends clipboard from phone to pcs
   //phone will emit the user's id, clipboard data and pc list
   //pcs will be listening here
   socket.on("from_phone", (data) => {
@@ -42,5 +41,13 @@ io.on("connection", (socket) => {
     });
   });
 
- 
+  // when user sends clipboard from pc to phone
+  //pc will emit on the from pc channel,
+  //phone will listen from this channel
+  socket.on("from_pc", (data) => {
+    const { userid, phonesList } = data;
+    phonesList.foreach((element) => {
+      socket.broadcast.emit(`to_phone-${element.id}-${userid}`, data);
+    });
+  });
 });
