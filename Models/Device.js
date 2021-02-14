@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const PhoneSchema = mongoose.Schema({
+const DeviceSchema = mongoose.Schema({
   os: {
     type: String,
     required: true,
@@ -14,12 +14,19 @@ const PhoneSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  ownerid: {
+
+  type: {
     type: String,
     required: true,
   },
+
+  ownerid: {
+    type: String,
+    required: true,
+    
+  },
 });
 
-const Phone = mongoose.model("Phone", PhoneSchema);
+const Device = mongoose.model("Phone", DeviceSchema);
 
-module.exports = Phone;
+module.exports = Device;
