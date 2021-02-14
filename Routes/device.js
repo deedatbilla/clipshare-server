@@ -14,4 +14,19 @@ router.post("/addDevice", auth, async (req, res) => {
   }
 });
 
+router.get("/deviceList", auth, async (req, res) => {
+    // Create a new device 
+    try {
+        const device = await Device.find()
+        if (!device) {
+            return res.status(401).send({error: 'no devices were found'})
+        }
+        
+        res.send({ device, message:'device list retrieved successfully!'})
+    } catch (error) {
+      res.status(400).send(error.message);
+      // console.log(error.message);
+    }
+  });
+
 module.exports = router;
