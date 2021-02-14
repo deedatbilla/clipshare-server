@@ -36,11 +36,11 @@ const userSchema = mongoose.Schema({
 
 userSchema.pre('save', async function (next) {
     // Hash the password before saving the user model
-    // const user = this
-    // if (user.isModified('password')) {
-    //     user.password = await bcrypt.hash(user.password, 8)
-    // }
-    // next()
+    const user = this
+    if (user.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, 8)
+    }
+    next()
 })
 
 userSchema.methods.generateAuthToken = async function() {
@@ -54,7 +54,7 @@ userSchema.methods.generateAuthToken = async function() {
 
 userSchema.statics.findByCredentials = async (email, password) => {
     // Search for a user by email and password.
-    const user = await User.findOne({ email: email} )
+    const user = await User.findOne({ email: email})
     if (!user) {
         throw new Error({ error: 'Invalid login credentials' })
     }

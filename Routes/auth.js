@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../Models/User");
+const Device=require('../Models/Device')
 const auth = require("../Middleware/auth");
 const router = express.Router();
 
@@ -46,6 +47,7 @@ router.post("/signin", cors(corsOptionsDelegate), async (req, res) => {
     res.send({ user, token });
   } catch (error) {
     res.status(400).send(error);
+    // console.log(error.message)
   }
 });
 
