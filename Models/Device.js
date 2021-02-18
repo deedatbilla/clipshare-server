@@ -5,16 +5,18 @@ const DeviceSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-
+//mac address
     mac: {
       type: String,
       required: true,
     },
+    //name of device
     name: {
       type: String,
       required: true,
     },
 
+    //whether pc or phone
     type: {
       type: String,
       required: true,

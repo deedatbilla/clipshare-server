@@ -1,7 +1,7 @@
 // var MongoClient = require('mongodb').MongoClient;
 const mongoose = require("mongoose");
 const url = process.env.DB_URL;
-mongoose.connect(url, { useNewUrlParser: true,useCreateIndex:true });
+mongoose.connect(url, { useNewUrlParser: true,useCreateIndex:true,useUnifiedTopology:true });
 const db = mongoose.connection;
 db.once("open", (_) => {
   console.log("Database connected:", url);

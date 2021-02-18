@@ -1,9 +1,8 @@
 const express = require("express");
 const User = require("../Models/User");
-const Device=require('../Models/Device')
+const Device = require("../Models/Device");
 const auth = require("../Middleware/auth");
 const router = express.Router();
-
 var cors = require("cors");
 var whitelist = ["http://localhost:3000"];
 var corsOptionsDelegate = function (req, callback) {
@@ -37,6 +36,7 @@ router.post("/signin", cors(corsOptionsDelegate), async (req, res) => {
   //Login a registered user
   try {
     const { email, password } = req.body;
+
     const user = await User.findByCredentials(email, password);
     if (!user) {
       return res
@@ -44,11 +44,12 @@ router.post("/signin", cors(corsOptionsDelegate), async (req, res) => {
         .send({ error: "Login failed! Check authentication credentials" });
     }
     const token = await user.generateAuthToken();
-    res.send({ user, token });
+    // const { user, token } = user;
+    res.status(200).send({ email: user.email, name: user.name,id:user._id,token: token });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({error});
     // console.log(error.message)
-  }
+  } 
 });
 
 router.get("/users/me", cors(corsOptionsDelegate), auth, async (req, res) => {

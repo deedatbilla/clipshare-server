@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-// require("./Database/db");
+require("./Database/db");
 const port = process.env.PORT;
 const app = express();
 const server = require("http").Server(app);
@@ -12,7 +12,7 @@ const io = require("socket.io")(server, {
     credentials: true
   }
 });
-const userRouter = require("./Routes/auth");
+const userRouter = require("./Routes/auth"); 
 const deviceRouter = require("./Routes/device");
 const clipBoard = require("./Routes/clipBoard");
 // app.listen(port, () => {
@@ -20,31 +20,51 @@ const clipBoard = require("./Routes/clipBoard");
 // });
 
 server.listen(port, () => console.log("server running on port:" + port));
+let numUsers = 0;
 io.on("connection", (socket) => {
+  let addedUser = false;
+  socket.on('userConnected', (email) => {
+    if (addedUser) return;
+    // we store the username in the socket session for this client
+    console.log("connected")
+    socket.email = email;
+    ++numUsers;
+    addedUser = true;
+    socket.emit('numUsers', {
+      numUsers: numUsers
+    }); 
+  })
   //when user sends clipboard from phone to pcs
-  //phone will emit the user's id, clipboard data and pc list
+  //phone will emit the user's id, clipboard data and pc list 
   //pcs will be listening here
   socket.on("from_phone", (data) => {
-    const { userid, pcs } = data;
+    const { email, clip } = JSON.parse(data);
     // socket.on(`user-pc${userid}`,)
-    pcs.forEach((element) => {
-      socket.broadcast.emit(`to_pc-${element.id}-${userid}`, data);
-    });
-  });
+    console.log(email,"from phone")
+      socket.broadcast.emit(`to_pc-${email}`, JSON.parse(data));
+    
+  }); 
  
   // when user sends clipboard from pc to phone
-  //pc will emit on the from pc channel, 
+  //pc will emit on the from pc channel,   
   //phone will listen from this channel
   socket.on("from_pc", (data) => { 
-    const { userid, phonesList } = data;
-    phonesList.foreach((element) => {
-      socket.broadcast.emit(`to_phone-${element.id}-${userid}`, data);
-    });
-  }); 
-
+    const { email,clip } = data;
+    console.log(data)
+    
+      socket.broadcast.emit(`to_phone-${email}`,clip);
+     
+  });  
+socket.on("to_pc_success",data=>{
+  const{email}=data
+  // console.log("hehehe")
+  socket.broadcast.emit(`to_pc_success-${email}`,"success");
+  
+}
+)
   socket.on("test1",data=>{
-    console.log(data.message)
-    socket.broadcast.emit("test2",data) 
+    console.log(data.message) 
+    socket.broadcast.emit("test2",data)  
    
   }) 
 });
