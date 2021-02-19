@@ -5,8 +5,16 @@ const { json } = require("express");
 const router = express.Router();
 router.post("/addClipBoard", auth, async (req, res) => {
   // Create a new ClipBoard
+  const {clipdata,from,to,id}=req.body
+  const data={
+    clipdata,
+    from,
+    to,
+    ownerid:id
+  }
   try {
-    const clipBoard = new ClipBoard(req.body);
+    
+    const clipBoard = new ClipBoard(data);
     await clipBoard.save();
     res.status(201).send({ clipBoard });
   } catch (error) {
@@ -21,8 +29,6 @@ router.post("/clipBoardList", auth, async (req, res) => {
   let s=JSON.stringify(req.body)
   let p=JSON.parse(s)
   try {
-    console.log(s,p);
-    console.log(req)
     const clipBoard = await ClipBoard.find(p);
     if (!clipBoard) {
       console.log("no clipboard found")
@@ -30,7 +36,7 @@ router.post("/clipBoardList", auth, async (req, res) => {
       
     } 
   // res.send("ok")
-   return res.status(200).send({ clipBoards:clipBoard, message: "ClipBoard list retrieved successfully!" });
+   return res.status(200).send( {clipBoard} );
   } catch (error) {
     // console.log(error.message,JSON.stringify(req.body));
    return res.status(400).send(error.message);

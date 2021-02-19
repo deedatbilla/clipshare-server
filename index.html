@@ -13,7 +13,7 @@
       });
       $("#btn").click(function () {
         // alert("dsd");
-        socket.emit("from_pc", {clip:"https://google.com",email:"deedat5@yahoo.com"});
+        socket.emit("from_pc", {clip:"Google hasn't provided a sample (at least not one that I can find, yet), so I've tried using it myself.",email:"deedat5@yahoo.com"});
       });
       socket.on("to_pc-deedat5@yahoo.com", function (data) {
         const{email,clip}=data
