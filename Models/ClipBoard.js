@@ -4,6 +4,7 @@ const ClipBoardSchema = mongoose.Schema(
     clipdata: {
       type: String,
       required: true,
+      unique:true
     },
 
     from: {
