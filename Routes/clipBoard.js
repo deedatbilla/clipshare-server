@@ -5,16 +5,11 @@ const { json } = require("express");
 const router = express.Router();
 router.post("/addClipBoard", auth, async (req, res) => {
   // Create a new ClipBoard
-  const {clipdata,from,to,id}=req.body
-  const data={
-    clipdata,
-    from,
-    to,
-    ownerid:id
-  }
+
+  
   try {
     
-    const clipBoard = new ClipBoard(data);
+    const clipBoard = new ClipBoard(req.body);
     await clipBoard.save();
     res.status(201).send({ clipBoard });
   } catch (error) {
