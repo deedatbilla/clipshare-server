@@ -22,12 +22,31 @@ const userSchema = mongoose.Schema(
         }
       },
     },
+
     password: {
       type: String,
       required: true,
       minLength: 6,
     },
     paid: false,
+    subscriptions: [
+      {
+        amount: {
+          type: Number,
+          required: true,
+        },
+
+        endDate: {
+          type: Date,
+          required: true,
+        },
+
+        startDate: {
+          type: Data,
+          required: true,
+        },
+      },
+    ],
     tokens: [
       {
         token: {
