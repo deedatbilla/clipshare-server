@@ -19,7 +19,7 @@ router.post("/addClipBoard", auth, async (req, res) => {
     res.status(201).send({ clipBoard });
   } catch (error) {
     res.status(400).send(error.message);
-    // console.log(error.message);
+    console.log(error.message);
   }
 });
 
