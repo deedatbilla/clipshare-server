@@ -28,24 +28,21 @@ const userSchema = mongoose.Schema(
       required: true,
       minLength: 6,
     },
-    paid: false,
     subscriptions: [
       {
         amount: {
           type: Number,
           required: true,
         },
-
         endDate: {
           type: Date,
           required: true,
         },
-
         startDate: {
-          type: Data,
+          type: Date,
           required: true,
         },
-      },
+      }
     ],
     tokens: [
       {
