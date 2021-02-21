@@ -13,11 +13,12 @@
       });
       $("#btn").click(function () {
         // alert("dsd");
-        socket.emit("from_pc", {clip:"Google hasn't provided a sampleng it myself.",email:"deedat5@yahoo.com"});
+        socket.emit("from_pc", {clip:"magic mike is good yh tablet blah yes yes please work new one",email:"deedat5@gmail.com"});
       });
-      socket.on("to_pc-deedat5@yahoo.com", function (data) {
+
+      socket.on("to_pc-deedat5@gmail.com", function (data) {
         const{email,clip}=data
-        // alert(email);
+        alert(clip);
         socket.emit("to_pc_success",data)
       });
     </script>

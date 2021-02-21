@@ -25,7 +25,7 @@ router.post("/signup", async (req, res) => {
     const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
-    res.status(201).send({  email: user.email, name: user.name,id:user._id,token: token,subscriptions:user.subscriptions });
+    res.status(201).send({  email: user.email, name: user.name,id:user._id,token: token,subscriptions:user.subscriptions,dateJoined:user.createdAt});
   } catch (error) {
     res.status(400).send(error.message);
     // console.log(error.message);
@@ -45,7 +45,7 @@ router.post("/signin", cors(corsOptionsDelegate), async (req, res) => {
     }
     const token = await user.generateAuthToken();
     // const { user, token } = user;
-    res.status(200).send({ email: user.email, name: user.name,id:user._id,token: token,subscriptions:user.subscriptions });
+    res.status(200).send({ email: user.email, name: user.name,id:user._id,token: token,subscriptions:user.subscriptions,dateJoined:user.createdAt  });
   } catch (error) {
     res.status(400).send({error});
     // console.log(error.message)
