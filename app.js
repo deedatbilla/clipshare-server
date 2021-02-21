@@ -6,16 +6,13 @@ const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://127.0.0.1:5500",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true
+  
   }
 });
 const userRouter = require("./Routes/auth"); 
 const deviceRouter = require("./Routes/device");
 const clipBoard = require("./Routes/clipBoard");
-// app.listen(port, () => {
+// app.listen(port, () => { 
 //   console.log(`Server running on port ${port}`);
 // });
 
