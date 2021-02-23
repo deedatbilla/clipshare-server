@@ -1,5 +1,5 @@
 const express = require("express");
-const Device = require("../Models/Device");
+const Device = require("../Models/Subscription");
 const auth = require("../Middleware/auth");
 const router = express.Router();
 router.post("/addDevice", auth, async (req, res) => {

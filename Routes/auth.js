@@ -1,6 +1,6 @@
 const express = require("express");
 const User = require("../Models/User");
-const Device = require("../Models/Device");
+const Subscription = require("../Models/Subscription");
 const auth = require("../Middleware/auth");
 const router = express.Router();
 var cors = require("cors");
@@ -25,23 +25,55 @@ router.post("/signup", async (req, res) => {
     const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
-    res.status(201).send({  email: user.email, name: user.name,id:user._id,token: token,dateJoined:user.createdAt});
+    res
+      .status(201)
+      .send({
+        email: user.email,
+        name: user.name,
+        id: user._id,
+        token: token,
+        dateJoined: user.createdAt,
+      });
   } catch (error) {
     res.status(400).send(error.message);
     // console.log(error.message);
   }
 });
 
-router.post("/subscriptions", auth, async (req, res) => {
+router.post("/get_latest_subscription", auth, async (req, res) => {
   // get subscriptions
   try {
-    const user = new User({email:req.body.email});
-    res.status(200).send({subscriptions:user.subscriptions});
+    const subscriptions =await Subscription.find(req.body);
+
+    res.status(200).send({ latest: subscriptions[subscriptions.length-1] });
   } catch (error) {
     res.status(400).send(error.message);
     // console.log(error.message);
   }
 });
+// console.log(new Date())
+router.post("/create_subscription", auth, async (req, res) => {
+  // create subscriptions
+  try {
+    let  oneYearFromNow = new Date();
+
+    const {amount,ownerid}=req.body
+    const payload={
+      endDate: oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1),
+      startDate:new Date(),
+      amount,
+      ownerid,
+    }
+    const sub = new Subscription(payload);
+
+    await sub.save()
+    res.status(201).send({ subscription: sub });
+  } catch (error) {
+    res.status(400).send(error.message);
+    // console.log(error.message);
+  }
+});
+
 
 router.post("/signin", cors(corsOptionsDelegate), async (req, res) => {
   //Login a registered user
@@ -55,11 +87,19 @@ router.post("/signin", cors(corsOptionsDelegate), async (req, res) => {
         .send({ error: "Login failed! Check authentication credentials" });
     }
     const token = await user.generateAuthToken();
-    res.status(200).send({ email: user.email, name: user.name,id:user._id,token: token,dateJoined:user.createdAt  });
+    res
+      .status(200)
+      .send({
+        email: user.email,
+        name: user.name,
+        id: user._id,
+        token: token,
+        dateJoined: user.createdAt,
+      });
   } catch (error) {
-    res.status(400).send({error});
+    res.status(400).send({ error });
     // console.log(error.message)
-  } 
+  }
 });
 
 router.get("/users/me", auth, async (req, res) => {
