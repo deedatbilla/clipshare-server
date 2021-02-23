@@ -25,7 +25,18 @@ router.post("/signup", async (req, res) => {
     const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
-    res.status(201).send({  email: user.email, name: user.name,id:user._id,token: token,subscriptions:user.subscriptions,dateJoined:user.createdAt});
+    res.status(201).send({  email: user.email, name: user.name,id:user._id,token: token,dateJoined:user.createdAt});
+  } catch (error) {
+    res.status(400).send(error.message);
+    // console.log(error.message);
+  }
+});
+
+router.post("/subscriptions", auth, async (req, res) => {
+  // get subscriptions
+  try {
+    const user = new User({email:req.body.email});
+    res.status(200).send({subscriptions:user.subscriptions});
   } catch (error) {
     res.status(400).send(error.message);
     // console.log(error.message);
@@ -44,20 +55,19 @@ router.post("/signin", cors(corsOptionsDelegate), async (req, res) => {
         .send({ error: "Login failed! Check authentication credentials" });
     }
     const token = await user.generateAuthToken();
-    // const { user, token } = user;
-    res.status(200).send({ email: user.email, name: user.name,id:user._id,token: token,subscriptions:user.subscriptions,dateJoined:user.createdAt  });
+    res.status(200).send({ email: user.email, name: user.name,id:user._id,token: token,dateJoined:user.createdAt  });
   } catch (error) {
     res.status(400).send({error});
     // console.log(error.message)
   } 
 });
 
-router.get("/users/me", cors(corsOptionsDelegate), auth, async (req, res) => {
+router.get("/users/me", auth, async (req, res) => {
   // View logged in user profile
   res.send(req.user);
 });
 
-router.post("/logout", cors(corsOptionsDelegate), auth, async (req, res) => {
+router.post("/logout", auth, async (req, res) => {
   // Log user out of the application
   try {
     req.user.tokens = req.user.tokens.filter((token) => {

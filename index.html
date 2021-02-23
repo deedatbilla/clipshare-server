@@ -15,7 +15,6 @@
         // alert("dsd");
         socket.emit("from_pc", {clip:"new internet",email:"deedat5@gmail.com"});
       });
-
       socket.on("to_pc-deedat5@gmail.com", function (data) {
         const{email,clip}=data
         alert(clip);

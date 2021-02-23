@@ -11,10 +11,6 @@ const io = require("socket.io")(server, {
 const userRouter = require("./Routes/auth"); 
 const deviceRouter = require("./Routes/device");
 const clipBoard = require("./Routes/clipBoard");
-// app.listen(port, () => { 
-//   console.log(`Server running on port ${port}`);
-// });
-
 server.listen(port, () => console.log("server running on port:" + port));
 let numUsers = 0;
 io.on("connection", (socket) => {
