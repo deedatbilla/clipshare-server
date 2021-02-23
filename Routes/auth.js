@@ -55,19 +55,36 @@ router.post("/get_latest_subscription", auth, async (req, res) => {
 router.post("/create_subscription", auth, async (req, res) => {
   // create subscriptions
   try {
-    let  oneYearFromNow = new Date();
+    var hash = req.headers["verif-hash"];
+  
+  if(!hash) {
+    console.log("no hash")
+    // discard the request,only a post with the right Flutterwave signature header gets our attention 
+  }
+  
+  // Get signature stored as env variable on your server
+  const secret_hash = process.env.VERIFY_PAYMENT_HASH;
+  
+  // check if signatures match
+  
+  if(hash !== secret_hash) {
 
-    const {amount,ownerid}=req.body
-    const payload={
-      endDate: oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1),
-      startDate:new Date(),
-      amount,
-      ownerid,
-    }
-    const sub = new Subscription(payload);
+    return
+   // silently exit, or check that you are passing the right hash on your server.
+  }
+    // let  oneYearFromNow = new Date();
+    console.log(req.body)
+    // const {amount,email}=req.body
+    // const payload={
+    //   endDate: oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1),
+    //   startDate:new Date(),
+    //   amount,
+    //   email,
+    // }
+    // const sub = new Subscription(payload);
 
-    await sub.save()
-    res.status(201).send({ subscription: sub });
+    // await sub.save()
+    res.status(201).send({ subscription: "Dsf" });
   } catch (error) {
     res.status(400).send(error.message);
     // console.log(error.message);
