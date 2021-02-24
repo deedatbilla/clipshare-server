@@ -13,7 +13,11 @@ const SubscriptionSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
-    ownerid:{
+    email:{
+      type:String,
+      required:true
+    },
+    txRef:{
       type:String,
       required:true
     }
