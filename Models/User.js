@@ -28,22 +28,6 @@ const userSchema = mongoose.Schema(
       required: true,
       minLength: 6,
     },
-    subscriptions: [
-      {
-        amount: {
-          type: Number,
-          required: true,
-        },
-        endDate: {
-          type: Date,
-          required: true,
-        },
-        startDate: {
-          type: Date,
-          required: true,
-        },
-      }
-    ],
     tokens: [
       {
         token: {

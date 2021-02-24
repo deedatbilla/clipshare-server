@@ -20,7 +20,12 @@ const SubscriptionSchema = mongoose.Schema(
     txRef:{
       type:String,
       required:true
+    },
+    type:{
+      type:String,
+      required:true
     }
+
   },
   {
     timestamps: {

@@ -18,13 +18,24 @@ var corsOptionsDelegate = function (req, callback) {
 router.get("/", (req, res) => {
   res.send({ message: "app" });
 });
-
+// console.log(new Date(Date.now() + 12096e5))
 router.post("/signup", async (req, res) => {
   // Create a new user
   try {
     const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
+    var fortnightAway = new Date(Date.now() + 12096e5);
+    const payload = {
+      endDate: fortnightAway,
+      startDate: new Date(),
+      amount:0,
+      email: user.email,
+      txRef:new Date().getTime(),
+      type:"free",
+    };
+    const sub = new Subscription(payload);
+    await sub.save()
     res.status(201).send({
       email: user.email,
       name: user.name,
@@ -34,7 +45,7 @@ router.post("/signup", async (req, res) => {
     });
   } catch (error) {
     res.status(400).send(error.message);
-    // console.log(error.message);
+    console.log(error.message);
   }
 });
 
@@ -76,7 +87,8 @@ router.post("/create_subscription", async (req, res) => {
       startDate: new Date(),
       amount,
       email: customer.email,
-      txRef
+      txRef,
+      type:amount===10?"yearly":"lifetime"
     };
      const sub = new Subscription(payload);
      await sub.save()
