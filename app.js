@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 require("./Database/db");
 var bodyParser = require('body-parser')
+var cors = require("cors");
 const port = process.env.PORT;
 const app = express();
 const server = require("http").Server(app);
@@ -62,7 +63,7 @@ socket.on("to_pc_success",data=>{
   }) 
 });
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "chrome-extension://glhijdpdgpolmbpndlbenenelnaedmil"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -71,6 +72,7 @@ app.use(express.json());
 app.use(userRouter);
 app.use(deviceRouter);
 app.use(clipBoard);
+app.use(cors());
 // app.use(bodyParser.json())
 // app.use("/public", express.static("public"));
 app.use((req, res, next) => {

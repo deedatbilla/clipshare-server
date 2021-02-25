@@ -6,7 +6,6 @@ const router = express.Router();
 router.post("/addClipBoard", auth, async (req, res) => {
   // Create a new ClipBoard
 
-  
   try {
     
     const clipBoard = new ClipBoard(req.body);
