@@ -27,7 +27,7 @@ router.post("/clipBoardList", auth, async (req, res) => {
       console.log("no clipboard found");
       return res.status(401).send({ error: "no ClipBoards were found" });
     }
-    return res.status(200).send({ clipBoard });
+    return res.status(200).send({ clipBoard:clipBoard.reverse() });
   } catch (error) {
     // console.log(error.message,JSON.stringify(req.body));
     return res.status(400).send(error.message);
