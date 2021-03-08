@@ -67,7 +67,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
   // Search for a user by email and password.
 
   try {
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({email });
     // console.log(user,"dsfd")
     if (!user) {
       // console.log("no user")

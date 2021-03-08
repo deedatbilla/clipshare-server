@@ -24,6 +24,11 @@ const SubscriptionSchema = mongoose.Schema(
     type:{
       type:String,
       required:true
+    },
+
+    meta:{
+      type:String,
+      required:false
     }
 
   },
