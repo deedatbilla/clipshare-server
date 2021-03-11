@@ -85,35 +85,34 @@ router.post("/create_subscription", async (req, res) => {
       const { data } = request_json;
       const { tx_ref, amount, status, customer, payment_type, card } = data;
       // const { email } = customer;
+      let payload = null;
       if (status === "successful" && payment_type === "card") {
-        const payload = {
+        payload = {
           endDate: oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1),
           startDate: new Date(),
           amount,
-          email:customer.email,
-          txRef:tx_ref,
+          email: customer.email,
+          txRef: tx_ref,
           type: amount === 10 ? "yearly" : "lifetime",
           meta: JSON.stringify(card),
         };
-
-        const sub = new Subscription(payload);
-        await sub.save();
-        return res.status(200).send({ sub });
       }
-    }
 
-    const { txRef, amount, customer } = request_json;
-    const payload = {
-      endDate: oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1),
-      startDate: new Date(),
-      amount,
-      email: customer.email,
-      txRef,
-      type: amount === 10 ? "yearly" : "lifetime",
-    };
-    const sub = new Subscription(payload);
-    await sub.save();
-    return res.status(200).send({ sub });
+      if (status === "successful" && payment_type === "mobilemoneygh") {
+        payload = {
+          endDate: oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1),
+          startDate: new Date(),
+          amount,
+          email: customer.email,
+          txRef: tx_ref,
+          type: amount === 10 ? "yearly" : "lifetime",
+        };
+      }
+
+      const sub = new Subscription(payload);
+      await sub.save();
+      return res.status(200).send({ sub });
+    }
   } catch (error) {
     res.status(400).send(error.message);
     console.log(error.message);
