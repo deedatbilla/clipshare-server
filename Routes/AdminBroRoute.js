@@ -14,7 +14,7 @@ const app = express();
 const adminBro = new AdminBro({
   // databases: [],
   //   rootPath: "/admin",
-  resources: [clipBoard, User, Subscription],
+  resources: [clipBoard, User, Subscription,Admin],
 });
 
 // const router = AdminBroExpress.buildRouter(adminBro);
