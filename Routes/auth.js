@@ -66,7 +66,7 @@ router.post("/get_latest_subscription", auth, async (req, res) => {
 router.post("/create_subscription", async (req, res) => {
   // create subscriptions
   try {
-    console.log(req.body);
+    // console.log(req.body);
     var hash = req.headers["verif-hash"];
     if (!hash) {
       return;
@@ -77,7 +77,6 @@ router.post("/create_subscription", async (req, res) => {
     if (hash !== secret_hash) {
       return;
     }
-
     let oneYearFromNow = new Date();
     let temp = JSON.stringify(req.body);
     var request_json = JSON.parse(temp);

@@ -18,7 +18,8 @@ router.post("/addClipBoard", auth, async (req, res) => {
 
 router.post("/deleteAllClips", auth, async (req, res) => {
   // delete all  ClipBoard
-  const { ownerid } = req.body;
+  const data = JSON.stringify(req.body);
+  const { ownerid } = JSON.parse(data);
   try {
     await ClipBoard.deleteMany({ ownerid });
     res.status(200).send({ status: "clips deleted" });
@@ -30,11 +31,11 @@ router.post("/deleteAllClips", auth, async (req, res) => {
 
 router.post("/deleteClip", auth, async (req, res) => {
   // delete a  ClipBoard
-  const { id } = req.body;
-
+  const data = JSON.stringify(req.body);
+  const { id } = JSON.parse(data);
   try {
     await ClipBoard.deleteOne({ _id: id });
-    res.status(201).send({ status: "clip deleted" });
+    res.status(200).send({ status: "clip deleted" });
   } catch (error) {
     res.status(400).send(error.message);
     console.log(error.message);
