@@ -39,11 +39,6 @@ io.on("connection", (socket) => {
     socket.broadcast.emit(`to_pc-${email}`, JSON.parse(data));
   });
 
-//tell chrome extension to save clips or not
-  socket.on("willSaveClip", (data) => {
-    const {email} = JSON.parse(data);
-    socket.broadcast.emit(`save-${email}`, JSON.parse(data));
-  });
 
   //when user sends clipboard from pc to phone
   //pc will emit on the from pc channel,
@@ -57,7 +52,7 @@ io.on("connection", (socket) => {
   socket.on("to_pc_success", (data) => {
     const { email } = data;
     // console.log("hehehe")
-    socket.broadcast.emit(`to_pc_success-${email}`, "success");
+    socket.broadcast.emit(`to_pc_success-${email}`, data);
   });
   socket.on("test1", (data) => {
     console.log(data.message);
