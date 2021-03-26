@@ -70,7 +70,6 @@ router.post("/reset", async (req, res) => {
       .then((user) => {
         // send email
         let link =
-          "https://" +
           "https://app.clypsync.com" +
           "/auth/reset/" +
           user.resetPasswordToken;
