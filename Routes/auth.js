@@ -71,7 +71,7 @@ router.post("/reset", async (req, res) => {
         // send email
         let link =
           "https://" +
-          "app.clypsync.com" +
+          "https://app.clypsync.com" +
           "/auth/reset/" +
           user.resetPasswordToken;
         const mailOptions = {
@@ -122,8 +122,7 @@ router.post("/reset-password", (req, res) => {
         to: user.email,
         from: process.env.FROM_EMAIL,
         subject: "Your password has been changed",
-        text: `Hi ${user.name} \n 
-              This is a confirmation that the password for your account ${user.email} has just been changed.\n`,
+        text: `Hi ${user.name} \nThis is a confirmation that the password for your account ${user.email} has just been changed.\n`,
       };
 
       sgMail.send(mailOptions, (error, result) => {
