@@ -4,16 +4,8 @@ const Subscription = require("../Models/Subscription");
 const auth = require("../Middleware/auth");
 const router = express.Router();
 var cors = require("cors");
-var whitelist = ["http://localhost:3000"];
-var corsOptionsDelegate = function (req, callback) {
-  var corsOptions;
-  if (whitelist.indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: true }; // disable CORS for this request
-  }
-  callback(null, corsOptions); // callback expects two parameters: error and options
-};
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 router.get("/", (req, res) => {
   res.send({ message: "app" });
@@ -57,6 +49,49 @@ router.post("/get_latest_subscription", auth, async (req, res) => {
       return res.status(401).send({ error: "no subscription was found" });
     }
     res.status(200).send({ subscriptions });
+  } catch (error) {
+    res.status(400).send(error.message);
+    console.log(error.message);
+  }
+});
+
+router.post("/reset", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    // console.log(user)
+    if (!user) {
+      return res.status(401).send({ error: "no user with this email found" });
+    }
+    // console.log(user)
+    user.generatePasswordReset();
+    // Save the updated user object
+    user
+      .save()
+      .then((user) => {
+        // send email
+        let link =
+          "https://" +
+          req.headers.host +
+          "/api/auth/reset/" +
+          user.resetPasswordToken;
+        const mailOptions = {
+          to: user.email,
+          from: "trately-noreply@clpypsync.com",
+          subject: "Password change request",
+          text: `Hey ${user.name}\nWe received a request to change your password.Please use the following link to reset your password.${link}\nThe link is valid for one hour. If you didn't request a password change, you can ignore this message and continue to use your current password.`,
+        };
+
+        sgMail.send(mailOptions, (error, result) => {
+          if (error) return res.status(500).json({ message: error.message });
+
+          res.status(200).json({
+            message: "A reset email has been sent to " + user.email + ".",
+          });
+        });
+      })
+      .catch((err) => res.status(500).json({ message: err.message }));
+
+    // res.status(200).send({ err: "DF" });
   } catch (error) {
     res.status(400).send(error.message);
     console.log(error.message);
@@ -140,7 +175,7 @@ router.post("/signin", async (req, res) => {
     });
   } catch (error) {
     res.status(400).send({ error });
-    // console.log(error.message)
+    console.log(error.message);
   }
 });
 
@@ -164,7 +199,7 @@ router.post("/logout", auth, async (req, res) => {
 
 router.post(
   "/users/logoutall",
-  cors(corsOptionsDelegate),
+
   auth,
   async (req, res) => {
     // Log user out of all devices

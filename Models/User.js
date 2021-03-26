@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto');
 
 const userSchema = mongoose.Schema(
   {
@@ -28,6 +29,15 @@ const userSchema = mongoose.Schema(
       required: true,
       minLength: 6,
     },
+    resetPasswordToken: {
+      type: String,
+      required: false
+  },
+
+  resetPasswordExpires: {
+      type: Date,
+      required: false
+  },
     tokens: [
       {
         token: {
@@ -63,6 +73,12 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
+userSchema.methods.generatePasswordReset = function() {
+  const user = this;
+  user.resetPasswordToken = crypto.randomBytes(20).toString('hex');
+  user.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
+};
+
 userSchema.statics.findByCredentials = async (email, password) => {
   // Search for a user by email and password.
 
@@ -83,6 +99,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
   } catch (error) {}
 };
 
-const User = mongoose.model("User", userSchema);
 
+const User = mongoose.model("User", userSchema);
+mongoose.set('useFindAndModify', false);
 module.exports = User;
