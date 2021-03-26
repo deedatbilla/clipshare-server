@@ -71,12 +71,12 @@ router.post("/reset", async (req, res) => {
         // send email
         let link =
           "https://" +
-          req.headers.host +
-          "/api/auth/reset/" +
+          "app.clypsync.com" +
+          "/auth/reset/" +
           user.resetPasswordToken;
         const mailOptions = {
           to: user.email,
-          from: "trately-noreply@clpypsync.com",
+          from: process.env.FROM_EMAIL,
           subject: "Password change request",
           text: `Hey ${user.name}\nWe received a request to change your password.Please use the following link to reset your password.${link}\nThe link is valid for one hour. If you didn't request a password change, you can ignore this message and continue to use your current password.`,
         };
@@ -96,6 +96,43 @@ router.post("/reset", async (req, res) => {
     res.status(400).send(error.message);
     console.log(error.message);
   }
+});
+
+router.post("/reset-password", (req, res) => {
+  User.findOne({
+    resetPasswordToken: req.body.token,
+    resetPasswordExpires: { $gt: Date.now() },
+  }).then((user) => {
+    if (!user)
+      return res
+        .status(401)
+        .json({ message: "Password reset token is invalid or has expired." });
+
+    //Set the new password
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    // Save
+    user.save((err) => {
+      if (err) return res.status(500).json({ message: err.message });
+
+      // send email
+      const mailOptions = {
+        to: user.email,
+        from: process.env.FROM_EMAIL,
+        subject: "Your password has been changed",
+        text: `Hi ${user.name} \n 
+              This is a confirmation that the password for your account ${user.email} has just been changed.\n`,
+      };
+
+      sgMail.send(mailOptions, (error, result) => {
+        if (error) return res.status(500).json({ message: error.message });
+
+        res.status(200).json({ message: "Your password has been updated." });
+      });
+    });
+  });
 });
 // console.log(new Date())
 router.post("/create_subscription", async (req, res) => {
