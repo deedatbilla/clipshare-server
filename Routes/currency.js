@@ -15,7 +15,7 @@ router.post("/addCurrency", auth, async (req, res) => {
   }
 });
 
-router.post("/currencyList", auth, async (req, res) => {
+router.get("/currencyList", auth, async (req, res) => {
   try {
     const currency = await Currency.find()
     if (!currency) {
