@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const Admin = require("../Models/Admin");
 const express = require("express");
 const AdminBroMongoose = require("@admin-bro/mongoose");
-const clipBoard = require("../Models/ClipBoard");
+const Currency = require("../Models/Currency");
 const Subscription = require("../Models/Subscription");
 const User = require("../Models/User");
 AdminBro.registerAdapter(AdminBroMongoose);
@@ -14,7 +14,7 @@ const app = express();
 const adminBro = new AdminBro({
   // databases: [],
   //   rootPath: "/admin",
-  resources: [User, Subscription],
+  resources: [User, Subscription,Currency],
 });
 
 // const router = AdminBroExpress.buildRouter(adminBro);
