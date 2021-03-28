@@ -11,7 +11,7 @@ const io = require("socket.io")(server, {
 });
 
 const userRouter = require("./Routes/auth");
-const deviceRouter = require("./Routes/device");
+const currencyRouter = require("./Routes/currency");
 const clipBoard = require("./Routes/clipBoard");
 const { router: adminBroRouter, adminBro } = require("./Routes/AdminBroRoute");
 server.listen(port, () => console.log("server running on port:" + port));
@@ -71,7 +71,7 @@ app.use(function (req, res, next) {
 app.use(express.json());
 app.use(userRouter);
 app.use(adminBro.options.rootPath, adminBroRouter);
-app.use(deviceRouter);
+app.use(currencyRouter);
 app.use(clipBoard);
 app.use(cors());
 // app.use(bodyParser.json())

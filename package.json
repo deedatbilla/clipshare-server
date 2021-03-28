@@ -4,7 +4,7 @@
   "description": "share clipboard between phone and pc",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
   "author": "deedatbilla",
   "license": "MIT",

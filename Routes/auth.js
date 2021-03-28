@@ -81,14 +81,14 @@ router.post("/reset", async (req, res) => {
         };
 
         sgMail.send(mailOptions, (error, result) => {
-          if (error) return res.status(500).json({ message: error.message });
+          if (error) return res.status(500).json({ message: error });
 
           res.status(200).json({
             message: "A reset email has been sent to " + user.email + ".",
           });
         });
       })
-      .catch((err) => res.status(500).json({ message: err.message }));
+      .catch((err) => res.status(500).json({ message: err }));
 
     // res.status(200).send({ err: "DF" });
   } catch (error) {
