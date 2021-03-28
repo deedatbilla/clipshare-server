@@ -180,13 +180,14 @@ router.post("/create_subscription", async (req, res) => {
         };
       }
 
-      if (status === "successful" && payment_type !== "mobilemoneygh" ||payment_type !== "card") {
+      if (status === "successful" && currency === "NGN") {
         payload = {
           endDate: oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1),
           startDate: new Date(),
           amount,
           email: customer.email,
           txRef: tx_ref,
+          type: amount === 662 ? "yearly" : "lifetime",
           currency,
         };
       }
