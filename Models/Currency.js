@@ -4,18 +4,23 @@ const CurrencySchema = mongoose.Schema(
     country: {
       type: String,
       required: true,
-      unique: true,
+     
     },
 
-    symbol: {
+    symbol: { 
         type: String,
         required: true,
-        unique: true,
+        
       },
-    charge: {
+    chargePerYear: {
       type: Number,
       required: true,
     },
+
+    chargeLifetime: {
+        type: Number,
+        required: true,
+      },
 
   },
   {

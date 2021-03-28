@@ -4,9 +4,9 @@ const auth = require("../Middleware/auth");
 const router = express.Router();
 router.post("/addCurrency", auth, async (req, res) => {
   // Create a new currency
-  const {charge,symbol,country}=req.body
+  const {chargePerYear,chargeLifetime,symbol,country}=req.body
   try {
-    const currency = new Currency({country,symbol,charge});
+    const currency = new Currency({country,symbol,chargePerYear,chargeLifetime});
     await currency.save();
     res.status(201).send({ currency });
   } catch (error) {
