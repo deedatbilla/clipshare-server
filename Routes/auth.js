@@ -152,7 +152,7 @@ router.post("/create_subscription", async (req, res) => {
     var request_json = JSON.parse(temp);
     if (request_json.data) {
       const { data } = request_json;
-      const { tx_ref, amount, status, customer, payment_type, card } = data;
+      const { tx_ref, amount, status, customer, payment_type, card,currency } = data;
       // const { email } = customer;
       let payload = null;
       if (status === "successful" && payment_type === "card") {
@@ -164,6 +164,7 @@ router.post("/create_subscription", async (req, res) => {
           txRef: tx_ref,
           type: amount === 10 ? "yearly" : "lifetime",
           meta: JSON.stringify(card),
+          currency
         };
       }
 
@@ -175,9 +176,20 @@ router.post("/create_subscription", async (req, res) => {
           email: customer.email,
           txRef: tx_ref,
           type: amount === 10 ? "yearly" : "lifetime",
+          currency,
         };
       }
 
+      if (status === "successful" && payment_type !== "mobilemoneygh" ||payment_type !== "card") {
+        payload = {
+          endDate: oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1),
+          startDate: new Date(),
+          amount,
+          email: customer.email,
+          txRef: tx_ref,
+          currency,
+        };
+      }
       const sub = new Subscription(payload);
       await sub.save();
       return res.status(200).send({ sub });
